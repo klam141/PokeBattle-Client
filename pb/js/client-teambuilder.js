@@ -1244,7 +1244,8 @@
 		/*********************************************************
 		 * Set charts
 		 *********************************************************/
-		
+
+	
 		arrangeCallback: {
 			pokemon: function(pokemon) {
 				pbvList = [335,285,280,275,265,260,255,225,220,210,200,195,190,185,180,175,170,165,160,155,150,145,140,135,130,125,120,115,110,105,100,95,90,85,80,75,70,65,60,55,50,45,40,35,30,25,20,15,10,5,1001];
@@ -1254,7 +1255,6 @@
 				var pokemonData = exports.BattlePokedex[toId(pokemon.species)];
 				if (!pokemonData) return 'Illegal';
 				var pbvData = pokemonData.pokebattlevalue
-				console.log();
 				return pbvData;
 			},
 			item: function(item) {
