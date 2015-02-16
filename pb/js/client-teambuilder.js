@@ -2,6 +2,60 @@
 
 	// this is a useful global
 	var teams;
+	
+	pbvs = function(team) {
+		var returner = {
+			total: 0,
+			mons: new Array()
+		};
+		
+		var bpCount = -1,
+			bpPBV = 15,
+			bpTotalPBV = 0;
+
+		var evioliteMultiplier = 1.3,
+			evioliteTotal = 0;
+
+		for (var i = 0; i < team.length; i++) {
+			var itemTemplate = Tools.getTemplate(Tools.getItem(team[i].item).megaStone);
+			var pokemonTemplate = Tools.getTemplate(team[i].species);
+			if (pokemonTemplate.exists === false) continue;
+			returner.mons[i] = 0;
+			
+			// Check if the pomeon is a mega and fetch the template if so
+			if (pokemonTemplate.baseSpecies == itemTemplate.baseSpecies) {
+				pokemonTemplate = Tools.getTemplate(itemTemplate);
+			}
+			
+			// The pokemon has baton pass increment bpCount
+			if (team[i].moves.indexOf('Baton Pass') > -1) bpCount++;
+			
+			// If the pokemon is holding an eviolite and has a high evolution then multiply the pbv
+			if (team[i].item == "Eviolite") {
+				if (!team[i].evoLevel) {
+					pbvWithEviolite = (Math.round(pokemonTemplate.pokebattlevalue * evioliteMultiplier / 5) * 5);
+					returner.total += pbvWithEviolite;
+					returner.mons[i] += pbvWithEviolite;
+					evioliteTotal += pbvWithEviolite - pokemonTemplate.pokebattlevalue;
+				} else {
+					// Add the PBV to the total PBV
+					returner.total += pokemonTemplate.pokebattlevalue;
+					returner.mons[i] += pokemonTemplate.pokebattlevalue;
+				}
+			} else {
+				// Add the PBV to the total PBV
+				returner.total += pokemonTemplate.pokebattlevalue;
+				returner.mons[i] += pokemonTemplate.pokebattlevalue;
+			}
+		}
+
+		// Add the baton pass PBV to the total PBV
+		if (bpCount >= 0) {
+			bpTotalPBV = bpPBV * Math.pow(2, bpCount);
+			returner.total += bpTotalPBV;
+		}
+		return returner;
+	};
 
 	var TeambuilderRoom = exports.TeambuilderRoom = exports.Room.extend({
 		type: 'teambuilder',
