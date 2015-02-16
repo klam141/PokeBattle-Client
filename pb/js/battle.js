@@ -178,6 +178,7 @@ var Pokemon = (function () {
 		this.hpcolor = '';
 		this.moves = [];
 		this.ability = '';
+		this.baseAbility = '';
 		this.item = '';
 		this.species = species;
 		this.fainted = false;
@@ -369,7 +370,6 @@ var Pokemon = (function () {
 		return (details === this.details.replace(/-[A-Za-z0-9*]+(, |$)/, '$1'));
 	};
 	Pokemon.prototype.getIdent = function () {
-		if (this.side.active.length === 1) return this.ident;
 		var slots = ['a','b','c','d','e','f'];
 		return this.ident.substr(0,2) + slots[this.slot] + this.ident.substr(2);	
 	};
@@ -444,14 +444,14 @@ var Pokemon = (function () {
 					xscale: 1 * 1.2,
 					yscale: .7 * 1.2,
 					opacity: 1
-				}, BattleEffects.none), 300 * window.speed).animate(battle.pos({
+				}, BattleEffects.none), 300).animate(battle.pos({
 					x: this.sprite.x,
 					y: this.sprite.y,
 					z: this.sprite.behind(-15),
 					xscale: 1,
 					yscale: .7,
 					opacity: .4
-				}, BattleEffects.none), 300 * window.speed);
+				}, BattleEffects.none), 300);
 			}
 			return;
 		}
@@ -474,9 +474,9 @@ var Pokemon = (function () {
 				xscale: 1,
 				yscale: .7,
 				opacity: .9
-			}, BattleEffects.none), 300 * window.speed).animate({
+			}, BattleEffects.none), 300).animate({
 				opacity: .4
-			}, 300 * window.speed);
+			}, 300);
 			this.turnstatuses[volatile][1] = elem;
 		}
 	};
@@ -577,7 +577,8 @@ var Pokemon = (function () {
 			spd: 'SpD',
 			spe: 'Spe',
 			accuracy: 'Accuracy',
-			evasion: 'Evasion'
+			evasion: 'Evasion',
+			spc: 'Spc'
 		};
 		if (!this.boosts[boostStat]) {
 			return '1&times;&nbsp;' + boostStatTable[boostStat];
@@ -609,6 +610,7 @@ var Pokemon = (function () {
 		return 'bad';
 	};
 	Pokemon.prototype.clearVolatile = function () {
+		this.ability = this.baseAbility;
 		this.atk = this.atkStat;
 		this.def = this.defStat;
 		this.spa = this.spaStat;
@@ -774,7 +776,7 @@ var Sprite = (function () {
 	Sprite.prototype.animTransform = function (species) {
 		if (!this.oldsp) this.oldsp = this.sp;
 		if (species.volatiles && species.volatiles.formechange) species = species.volatiles.formechange[2];
-		sp = Tools.getSpriteData(species, this.isBackSprite ? 0 : 1, {afd: this.battle.tier === "[Seasonal] Fools Festival"});
+		sp = Tools.getSpriteData(species, this.isBackSprite ? 0 : 1, {afd: this.battle.tier === "[Seasonal] Fools Festival", gen: this.battle.gen});
 		this.sp = sp;
 		var self = this;
 		var battle = this.battle;
@@ -785,16 +787,16 @@ var Sprite = (function () {
 			yscale: 0,
 			xcale: 1,
 			opacity: .3
-		}, this.oldsp), 300 * window.speed, function () {
+		}, this.oldsp), 300, function () {
 			self.elem.attr('src', sp.url);
 			self.elem.animate(battle.pos({
 				x: self.x,
 				y: self.y,
 				z: self.z,
 				opacity: 1
-			}, sp), 300 * window.speed);
+			}, sp), 300);
 		});
-		this.battle.activityWait(500 * window.speed);
+		this.battle.activityWait(500);
 	};
 	Sprite.prototype.destroy = function () {
 		if (this.elem) this.elem.remove();
@@ -824,7 +826,7 @@ var Sprite = (function () {
 		this.subElem = this.battle.spriteElemsFront[this.siden].children().last();
 
 		//temp//this.subElem.css({position: 'absolute', display: 'block'});
-		this.selfAnim({}, 500 * window.speed);
+		this.selfAnim({}, 500);
 		this.subElem.css({
 			position: 'absolute',
 			opacity: 0,
@@ -840,7 +842,7 @@ var Sprite = (function () {
 			x: this.x,
 			y: this.y,
 			z: this.z
-		}, subsp), 500 * window.speed);
+		}, subsp), 500);
 		this.battle.activityWait(this.subElem);
 	};
 	Sprite.prototype.animSubFade = function () {
@@ -854,10 +856,10 @@ var Sprite = (function () {
 			y: this.y - 50,
 			z: this.z,
 			opacity: 0
-		}, this.subsp), 500 * window.speed);
+		}, this.subsp), 500);
 
 		this.subElem = null;
-		this.selfAnim({}, 500 * window.speed);
+		this.selfAnim({}, 500);
 		this.iw = this.sp.w;
 		this.ih = this.sp.h;
 		this.battle.activityWait(this.elem);
@@ -865,17 +867,17 @@ var Sprite = (function () {
 	Sprite.prototype.beforeMove = function () {
 		if (this.subElem && !this.duringMove) {
 			this.duringMove = true;
-			this.selfAnim({}, 300 * window.speed);
+			this.selfAnim({}, 300);
 			this.subElem.animate(this.battle.pos({
 				x: this.leftof(-50),
 				y: this.y,
 				z: this.z,
 				opacity: 0.5
-			}, this.subsp), 300 * window.speed);
+			}, this.subsp), 300);
 			if (this.battle.sides[this.isBackSprite ? 1 : 0].active[0]) {
 				this.battle.sides[this.isBackSprite ? 1 : 0].active[0].sprite.delay(300);
 			}
-			this.battle.animationDelay = 300 * window.speed;
+			this.battle.animationDelay = 300;
 			this.battle.activityWait(this.elem);
 
 			return true;
@@ -884,18 +886,18 @@ var Sprite = (function () {
 	};
 	Sprite.prototype.afterMove = function () {
 		if (this.subElem && this.duringMove) {
-			this.subElem.delay(300 * window.speed);
+			this.subElem.delay(300);
 			this.duringMove = false;
 			var self = this;
 			this.elem.add(this.subElem).promise().done(function () {
 				if (!self.subElem || !self.elem) return;
-				self.selfAnim({}, 300 * window.speed);
+				self.selfAnim({}, 300);
 				self.subElem.animate(self.battle.pos({
 					x: self.x,
 					y: self.y,
 					z: self.z,
 					opacity: 1
-				}, self.subsp), 300 * window.speed);
+				}, self.subsp), 300);
 			});
 			return true;
 		}
@@ -997,17 +999,17 @@ var Sprite = (function () {
 			x: this.x,
 			y: this.y - 10,
 			z: this.z,
-			time: window.speed * 300 
+			time: 300
 		}, 'ballistic2', 'fade');
-		this.elem.delay(300 * window.speed).animate(this.battle.pos({
+		this.elem.delay(300).animate(this.battle.pos({
 			x: this.x,
 			y: this.y + 30,
 			z: this.z
-		}, this.sp), 400 * window.speed).animate(this.battle.posT({
+		}, this.sp), 400).animate(this.battle.posT({
 			x: this.x,
 			y: this.y,
 			z: this.z
-		}, this.sp, 'accel'), 300 * window.speed);
+		}, this.sp, 'accel'), 300);
 		this.battle.activityWait(this.elem);
 	};
 	Sprite.prototype.animDragIn = function (slot) {
@@ -1046,15 +1048,15 @@ var Sprite = (function () {
 			z: this.z,
 			opacity: 0
 		}, this.sp));
-		this.elem.delay(300 * window.speed).animate(this.battle.posT({
+		this.elem.delay(300).animate(this.battle.posT({
 			x: this.x,
 			y: this.y,
 			z: this.z
-		}, this.sp, 'decel'), 400 * window.speed);
+		}, this.sp, 'decel'), 400);
 		this.w = this.sp.w;
 		this.h = this.sp.h;
 		this.battle.activityWait(this.elem);
-		this.battle.animationDelay = 700 * window.speed;
+		this.battle.animationDelay = 700;
 	};
 	Sprite.prototype.animDragOut = function () {
 		this.removeSub();
@@ -1064,7 +1066,7 @@ var Sprite = (function () {
 			y: this.y,
 			z: this.z,
 			opacity: 0
-		}, this.sp, 'accel'), 400 * window.speed);
+		}, this.sp, 'accel'), 400);
 	};
 	Sprite.prototype.animUnsummon = function (instant) {
 		this.removeSub();
@@ -1078,7 +1080,7 @@ var Sprite = (function () {
 			z: this.z,
 			scale: 0,
 			opacity: 0,
-			time: window.speed * 400 
+			time: 400
 		});
 		this.battle.showEffect('pokeball', {
 			opacity: 1,
@@ -1086,13 +1088,13 @@ var Sprite = (function () {
 			y: this.y - 40,
 			z: this.z,
 			scale: .7,
-			time: window.speed * 300 
+			time: 300
 		}, {
 			opacity: 0,
 			x: this.x,
 			y: this.y,
 			z: this.behind(50),
-			time: window.speed * 700 
+			time: 700
 		}, 'ballistic2');
 		this.battle.activityWait(this.elem);
 	};
@@ -1124,7 +1126,7 @@ var Sprite = (function () {
 			z: this.z,
 			scale: 1,
 			opacity: 1,
-			time: window.speed * 500 
+			time: 500
 		}, end);
 		if (this.subElem && !this.duringMove) {
 			end.z += (this.isBackSprite ? -1 : 1) * 30;
@@ -1140,7 +1142,7 @@ var Sprite = (function () {
 			z: this.z,
 			scale: 1,
 			opacity: 1,
-			time: window.speed * 500 
+			time: 500
 		}, end);
 		if (this.subElem && !this.duringMove) {
 			this.subElem.animate(this.battle.posT(end, this.subsp, transition, this), end.time);
@@ -1218,7 +1220,7 @@ var Side = (function () {
 		for (var i = 0; i < this.pokemon.length; i++) {
 			var poke = this.pokemon[i];
 			poke.sprite.destroy();
-			poke.sprite = new Sprite(Tools.getSpriteData(poke, this.n, {afd: this.battle.tier === "[Seasonal] Fools Festival"}), this.x, this.y, this.z, this.battle, this.n);
+			poke.sprite = new Sprite(Tools.getSpriteData(poke, this.n, {afd: this.battle.tier === "[Seasonal] Fools Festival", gen: this.battle.gen}), this.x, this.y, this.z, this.battle, this.n);
 		}
 	};
 	Side.prototype.setSprite = function (spriteid) {
@@ -1345,7 +1347,7 @@ var Side = (function () {
 				opacity: .7
 			}, BattleEffects.none)).animate({
 				opacity: .3
-			}, 300 * window.speed);
+			}, 300);
 			elem = curelem;
 			this.sideConditions[condition] = [condition, elem, 5];
 			break;
@@ -1369,7 +1371,7 @@ var Side = (function () {
 				opacity: .7
 			}, BattleEffects.none)).animate({
 				opacity: .2
-			}, 300 * window.speed);
+			}, 300);
 			elem = curelem;
 			this.sideConditions[condition] = [condition, elem, 5];
 			break;
@@ -1417,7 +1419,7 @@ var Side = (function () {
 				opacity: .7
 			}, BattleEffects.none)).animate({
 				opacity: .2
-			}, 300 * window.speed);
+			}, 300);
 			elem = curelem;
 			this.sideConditions[condition] = [condition, elem, 5];
 			break;
@@ -1469,10 +1471,10 @@ var Side = (function () {
 			curelem = this.battle.spriteElemsFront[this.n].children().last();
 			curelem.css(this.battle.pos({
 				display: 'block',
-				x: this.x,
-				y: this.y-15,
+				x: this.x + 15,
+				y: this.y - 35,
 				z: this.z,
-				opacity: 0.5,
+				opacity: 0.4,
 				scale: 0.7
 			}, BattleEffects.web));
 			elem = curelem;
@@ -1507,7 +1509,7 @@ var Side = (function () {
 		if (!poke.ability && poke.baseAbility) poke.ability = poke.baseAbility;
 		poke.id = id;
 		poke.reset();
-		poke.sprite = new Sprite(Tools.getSpriteData(poke, this.n, {afd: this.battle.tier === "[Seasonal] Fools Festival"}), this.x, this.y, this.z, this.battle, this.n);
+		poke.sprite = new Sprite(Tools.getSpriteData(poke, this.n, {afd: this.battle.tier === "[Seasonal] Fools Festival", gen: this.battle.gen}), this.x, this.y, this.z, this.battle, this.n);
 
 		if (typeof replaceSlot !== 'undefined') {
 			this.pokemon[replaceSlot] = poke;
@@ -1594,10 +1596,10 @@ var Side = (function () {
 			top: pokemon.sprite.top - 53 - pokemon.sprite.statbarOffset,
 			opacity: 0
 		});
-		pokemon.statbarElem.delay(300 * window.speed).animate({
+		pokemon.statbarElem.delay(300).animate({
 			top: pokemon.sprite.top - 73 - pokemon.sprite.statbarOffset,
 			opacity: 1
-		}, 400 * window.speed);
+		}, 400);
 
 		this.battle.dogarsCheck(pokemon);
 
@@ -1646,7 +1648,7 @@ var Side = (function () {
 				oldpokemon.statbarElem.animate({
 					left: pokemon.sprite.left - 130,
 					opacity: 0
-				}, 400 * window.speed, function () {
+				}, 400, function () {
 					oldpokemon.statbarElem.remove();
 					oldpokemon.statbarElem = null;
 				});
@@ -1657,16 +1659,16 @@ var Side = (function () {
 				top: pokemon.sprite.top - 73 - pokemon.sprite.statbarOffset,
 				opacity: 0
 			});
-			pokemon.statbarElem.delay(300 * window.speed).animate({
+			pokemon.statbarElem.delay(300).animate({
 				left: pokemon.sprite.left - 80,
 				opacity: 1
-			}, 400 * window.speed);
+			}, 400);
 		} else {
 			if (oldpokemon) {
 				oldpokemon.statbarElem.animate({
 					left: pokemon.sprite.left - 30,
 					opacity: 0
-				}, 400 * window.speed, function () {
+				}, 400, function () {
 					oldpokemon.statbarElem.remove();
 					oldpokemon.statbarElem = null;
 				});
@@ -1677,10 +1679,10 @@ var Side = (function () {
 				top: pokemon.sprite.top - 73 - pokemon.sprite.statbarOffset,
 				opacity: 0
 			});
-			pokemon.statbarElem.delay(300 * window.speed).animate({
+			pokemon.statbarElem.delay(300).animate({
 				left: pokemon.sprite.left - 80,
 				opacity: 1
-			}, 400 * window.speed);
+			}, 400);
 		}
 
 		this.battle.dogarsCheck(pokemon);
@@ -1755,7 +1757,7 @@ var Side = (function () {
 		pokemon.statbarElem.animate({
 			top: pokemon.sprite.top - 43 - pokemon.sprite.statbarOffset,
 			opacity: 0
-		}, 300 * window.speed, function () {
+		}, 300, function () {
 			pokemon.statbarElem.remove();
 			pokemon.statbarElem = null;
 		});
@@ -1898,7 +1900,7 @@ var Side = (function () {
 		pokemon.sprite.animFaint();
 		pokemon.statbarElem.animate({
 			opacity: 0
-		}, 300 * window.speed, function () {
+		}, 300, function () {
 			pokemon.statbarElem.remove();
 			pokemon.statbarElem = null;
 		});
@@ -2105,7 +2107,6 @@ var Battle = (function () {
 		// 5 = seeking
 		this.playbackState = 0;
 
-		this.backdropImage = BattleBackdrops[0];
 		this.backdropImage = BattleBackdrops[Math.floor(Math.random() * BattleBackdrops.length)];
 
 		this.bgm = null;
@@ -2155,7 +2156,7 @@ var Battle = (function () {
 	Battle.prototype.bgm = null;
 
 	Battle.prototype.mute = false;
-	Battle.prototype.messageDelay = 8 * window.speed;
+	Battle.prototype.messageDelay = 8;
 
 
 	Battle.prototype.removePseudoWeather = function (weather) {
@@ -2191,7 +2192,7 @@ var Battle = (function () {
 		this.gen = 6;
 	};
 	Battle.prototype.updateGen = function () {
-		if (this.gen < 4) this.backdropImage = '';
+		if (this.gen < 3) this.backdropImage = 'bg-gen1.png';
 		else if (this.gen < 6) this.backdropImage = 'bg.jpg';
 		if (this.bgElem) this.bgElem.css('background-image','url(' + Tools.resourcePrefix + 'fx/' + this.backdropImage + ')');
 	};
@@ -2416,10 +2417,10 @@ var Battle = (function () {
 		});
 		elem.delay(delay).animate({
 			opacity: opacity
-		}, 250 * window.speed).delay((duration - 250) * window.speed);
+		}, 250).delay(duration - 250);
 		elem.animate({
 			opacity: 0
-		}, 250 * window.speed);
+		}, 250);
 	};
 	Battle.prototype.showEffect = function (img, start, end, transition, after) {
 		var effect = img;
@@ -2450,15 +2451,15 @@ var Battle = (function () {
 		if (start.time) {
 			effectElem.delay(start.time).animate({
 				opacity: startpos.opacity
-			}, 1 * window.speed);
+			}, 1);
 		} else {
 			effectElem.css('opacity', startpos.opacity);
 		}
-		effectElem.animate(endpos, (end.time - start.time) * window.speed);
+		effectElem.animate(endpos, end.time - start.time);
 		if (after === 'fade') {
 			effectElem.animate({
 				opacity: 0
-			}, 100 * window.speed);
+			}, 100);
 		}
 		if (after === 'explode') {
 			if (end.scale) end.scale *= 3;
@@ -2466,7 +2467,7 @@ var Battle = (function () {
 			if (end.yscale) end.yscale *= 3;
 			end.opacity = 0;
 			var endendpos = this.pos(end, effect);
-			effectElem.animate(endendpos, 200 * window.speed);
+			effectElem.animate(endendpos, 200);
 		}
 		this.activityWait(effectElem);
 	};
@@ -2504,7 +2505,7 @@ var Battle = (function () {
 				});
 				this.messagebarElem.animate({
 					opacity: 1
-				}, 300 * window.speed);
+				}, 300);
 			}
 			this.hiddenMessageElem.append('<p></p>');
 			var messageElem = this.hiddenMessageElem.children().last();
@@ -2522,7 +2523,7 @@ var Battle = (function () {
 					height: 'show',
 					'padding-bottom': 4,
 					opacity: 1
-				}, 300 * window.speed);
+				}, 300);
 			});
 			this.activityWait(messageElem);
 		}
@@ -2536,7 +2537,7 @@ var Battle = (function () {
 				this.messagebarElem.delay(this.messageDelay).animate({
 					height: 'toggle',
 					opacity: 0
-				}, 300 * window.speed);
+				}, 300);
 				this.activityWait(this.messagebarElem);
 			}
 		}
@@ -2571,7 +2572,7 @@ var Battle = (function () {
 			this.endLastTurnPending = true;
 		}
 		this.turn = turnnum;
-		this.updateWeatherLeft();
+		this.updatePseudoWeatherLeft();
 
 		if (this.mySide.active[0]) this.mySide.active[0].clearTurnstatuses();
 		if (this.mySide.active[1]) this.mySide.active[1].clearTurnstatuses();
@@ -2602,16 +2603,16 @@ var Battle = (function () {
 		newTurnElem.animate({
 			opacity: 1,
 			left: 110
-		}, 500 * window.speed).animate({
+		}, 500).animate({
 			opacity: .4
-		}, 1500 * window.speed);
+		}, 1500);
 		prevTurnElem.animate({
 			opacity: 0,
 			left: 60
-		}, 500 * window.speed, function () {
+		}, 500, function () {
 			prevTurnElem.remove();
 		});
-		this.activityWait(500 * window.speed);
+		this.activityWait(500);
 		if (this.turnCallback) this.turnCallback(this);
 	};
 	Battle.prototype.changeWeather = function (weather, poke, isUpkeep) {
@@ -2666,12 +2667,16 @@ var Battle = (function () {
 		}
 		var newWeather = weatherTable[weather];
 		if (isUpkeep) {
+			if (this.weather && this.weatherTimeLeft) {
+				this.weatherTimeLeft--;
+				if (this.weatherMinTimeLeft != 0) this.weatherMinTimeLeft--;
+			}
 			if (!this.fastForward) {
 				this.weatherElem.animate({
 					opacity: 1.0
-				}, 400 * window.speed).animate({
+				}, 400).animate({
 					opacity: .4
-				}, 400 * window.speed);
+				}, 400);
 			}
 			if (newWeather && newWeather.upkeepMessage) this.log('<div><small>' + newWeather.upkeepMessage + '</small></div>');
 			return;
@@ -2685,6 +2690,10 @@ var Battle = (function () {
 				this.log('<div><small>' + newWeather.upkeepMessage + '</small></div>');
 				this.weatherTimeLeft = 0;
 				this.weatherMinTimeLeft = 0;
+			} else if (weather === 'deltastream' || weather === 'desolateland' || weather === 'primordialsea'){
+				this.message('<small>' + newWeather.startMessage + '</small>');
+				this.weatherTimeLeft = 0;
+				this.weatherMinTimeLeft = 0;
 			} else {
 				this.message('<small>' + newWeather.startMessage + '</small>');
 				this.weatherTimeLeft = 8;
@@ -2696,13 +2705,9 @@ var Battle = (function () {
 		}
 		this.updateWeather(weather);
 	};
-	Battle.prototype.updateWeatherLeft = function () {
+	Battle.prototype.updatePseudoWeatherLeft = function () {
 		for (var i = 0; i < this.pseudoWeather.length; i++) {
 			if (this.pseudoWeather[i][1] > 0) this.pseudoWeather[i][1]--;
-		}
-		if (this.weather && this.weatherTimeLeft) {
-			this.weatherTimeLeft--;
-			if (this.weatherMinTimeLeft != 0) this.weatherMinTimeLeft--;
 		}
 		this.updateWeather();
 	};
@@ -2719,7 +2724,7 @@ var Battle = (function () {
 			return ''; // weather doesn't exist
 		}
 		if (this.weatherMinTimeLeft != 0) {
-			return ' <small>(' + this.weatherMinTimeLeft + ' to ' + this.weatherTimeLeft + ' turns left)</small>';
+			return ' <small>(' + this.weatherMinTimeLeft + ' or ' + this.weatherTimeLeft + ' turns left)</small>';
 		}
 		if (this.weatherTimeLeft != 0) {
 			return ' <small>(' + this.weatherTimeLeft + ' turn' + (this.weatherTimeLeft == 1 ? '' : 's') + ' left)</small>';
@@ -2765,7 +2770,7 @@ var Battle = (function () {
 				var self = this;
 				this.weatherElem.animate({
 					opacity: 0
-				}, 300 * window.speed, function () {
+				}, 300, function () {
 					self.weatherElem.css({
 						display: 'block'
 					});
@@ -2775,7 +2780,7 @@ var Battle = (function () {
 			} else {
 				this.weatherElem.animate({
 					opacity: 0
-				}, 500 * window.speed);
+				}, 500);
 			}
 		} else if (weather) {
 			this.weatherElem.css({
@@ -2792,9 +2797,9 @@ var Battle = (function () {
 			}
 			this.weatherElem.animate({
 				opacity: 1.0
-			}, 400 * window.speed).animate({
+			}, 400).animate({
 				opacity: .4
-			}, 400 * window.speed);
+			}, 400);
 		}
 	};
 	Battle.prototype.resultAnim = function (pokemon, result, type, i) {
@@ -2807,18 +2812,18 @@ var Battle = (function () {
 		}
 		this.fxElem.append('<div class="result ' + type + 'result"><strong>' + result + '</strong></div>');
 		var effectElem = this.fxElem.children().last();
-		effectElem.delay((i * 350 + this.animationDelay) * window.speed).css({
+		effectElem.delay(i * 350 + this.animationDelay).css({
 			display: 'block',
 			opacity: 0,
 			top: pokemon.sprite.top - 5,
 			left: pokemon.sprite.left - 75
 		}).animate({
 			opacity: 1
-		}, 1 * window.speed);
+		}, 1);
 		effectElem.animate({
 			opacity: 0,
 			top: pokemon.sprite.top - 65
-		}, 1000 * window.speed, 'swing');
+		}, 1000, 'swing');
 		pokemon.side.updateStatbar(pokemon);
 		this.activityWait(effectElem);
 	};
@@ -2851,7 +2856,7 @@ var Battle = (function () {
 			$hp.animate({
 				width: w,
 				'border-right-width': w ? 1 : 0
-			}, 350 * window.speed, callback);
+			}, 350, callback);
 		}
 	};
 	Battle.prototype.healAnim = function (pokemon, damage, i) {
@@ -2883,7 +2888,7 @@ var Battle = (function () {
 			$hp.animate({
 				width: w,
 				'border-right-width': w ? 1 : 0
-			}, 350 * window.speed, callback);
+			}, 350, callback);
 		}
 	};
 	Battle.prototype.useMove = function (pokemon, move, target, kwargs) {
@@ -2932,19 +2937,19 @@ var Battle = (function () {
 						}).animate({
 							left: -30,
 							right: 30
-						}, 75 * window.speed).animate({
+						}, 75).animate({
 							left: 30,
 							right: -30
-						}, 100 * window.speed).animate({
+						}, 100).animate({
 							left: -30,
 							right: 30
-						}, 100 * window.speed).animate({
+						}, 100).animate({
 							left: 30,
 							right: -30
-						}, 100 * window.speed).animate({
+						}, 100).animate({
 							left: 0,
 							right: 0
-						}, 100 * window.speed, function () {
+						}, 100, function () {
 							$(this).css({
 								position: 'static'
 							});
@@ -3011,6 +3016,9 @@ var Battle = (function () {
 	Battle.prototype.cantUseMove = function (pokemon, effect, move, kwargs) {
 		pokemon.clearMovestatuses();
 		pokemon.side.updateStatbar(pokemon);
+		if (window.BattleStatusAnims && effect.id in BattleStatusAnims && !this.fastForward) {
+			BattleStatusAnims[effect.id].anim(this, [pokemon.sprite]);
+		}
 		switch (effect.id) {
 		case 'taunt':
 			this.message('' + pokemon.getName() + ' can\'t use ' + move.name + ' after the taunt!');
@@ -3026,7 +3034,6 @@ var Battle = (function () {
 			break;
 		case 'par':
 			this.resultAnim(pokemon, 'Paralyzed', 'par');
-			BattleOtherAnims['fullparalysis'].anim(this, [pokemon.sprite]);
 			this.message('' + pokemon.getName() + ' is paralyzed! It can\'t move!');
 			break;
 		case 'frz':
@@ -3071,7 +3078,7 @@ var Battle = (function () {
 			this.message('<small>' + pokemon.getName() + (move.name ? ' can\'t use ' + move.name + '' : ' can\'t move') + '!</small>');
 			break;
 		}
-		pokemon.sprite.anim({time:1 * window.speed});
+		pokemon.sprite.anim({time:1});
 	};
 	Battle.prototype.prepareMove = function (pokemon, move, target) {
 		if (!move.prepareAnim) return;
@@ -3138,9 +3145,11 @@ var Battle = (function () {
 						actions += "" + poke.getName() + " is hurt by the spikes!";
 						break;
 					case 'brn':
+						BattleStatusAnims['brn'].anim(this, [poke.sprite]);
 						actions += "" + poke.getName() + " was hurt by its burn!";
 						break;
 					case 'psn':
+						BattleStatusAnims['psn'].anim(this, [poke.sprite]);
 						actions += "" + poke.getName() + " was hurt by poison!";
 						break;
 					case 'lifeorb':
@@ -3299,6 +3308,8 @@ var Battle = (function () {
 			case '-boost':
 				var poke = this.getPokemon(args[1]);
 				var stat = args[2];
+				if (this.gen === 1 && stat === 'spd') break;
+				if (this.gen === 1 && stat === 'spa') stat = 'spc';
 				var amount = parseInt(args[3]);
 				if (!poke.boosts[stat]) {
 					poke.boosts[stat] = 0;
@@ -3330,6 +3341,8 @@ var Battle = (function () {
 			case '-unboost':
 				var poke = this.getPokemon(args[1]);
 				var stat = args[2];
+				if (this.gen === 1 && stat === 'spd') break;
+				if (this.gen === 1 && stat === 'spa') stat = 'spc';
 				var amount = parseInt(args[3]);
 				if (!poke.boosts[stat]) {
 					poke.boosts[stat] = 0;
@@ -3529,6 +3542,7 @@ var Battle = (function () {
 				var target = this.getPokemon(args[2]);
 				if (target) {
 					actions += "" + target.getName() + " avoided the attack!";
+					this.resultAnim(target, 'Missed', 'neutral', animDelay);
 				} else {
 					actions += "" + user.getName() + "'s attack missed!";
 				}
@@ -3540,6 +3554,11 @@ var Battle = (function () {
 				var fromeffect = Tools.getEffect(kwargs.from);
 				if (poke) {
 					this.resultAnim(poke, 'Failed', 'neutral', animDelay);
+				}
+				// Sky Drop blocking moves takes priority over all other moves
+				if (fromeffect.id === 'skydrop') {
+					actions += "Sky Drop won't let " + poke.getLowerName() + " go!";
+					break;
 				}
 				switch (effect.id) {
 				case 'brn':
@@ -3578,6 +3597,9 @@ var Battle = (function () {
 					} else {
 						actions += 'But ' + poke.getLowerName() + ' can\'t use the move!';
 					}
+					break;
+				case 'magikarpsrevenge':
+					actions += 'But ' + poke.getLowerName() + ' can\'t use the move!';
 					break;
 				case 'substitute':
 					if (kwargs.weak) {
@@ -3924,6 +3946,9 @@ var Battle = (function () {
 				var effect = Tools.getEffect(kwargs.from);
 				var ofpoke = this.getPokemon(kwargs.of);
 				poke.ability = ability.name;
+				if (!effect.id || kwargs.fail) {
+					if (!poke.baseAbility) poke.baseAbility = ability.name;
+				}
 
 				if (kwargs.silent) {
 					// do nothing
@@ -4004,6 +4029,8 @@ var Battle = (function () {
 				} else switch (effect.id) {
 				case 'mummy':
 					actions += "[" + poke.getName() + "\'s " + ability.name + "] " + poke.name + "'s Ability became Mummy!";
+					if (!poke.baseAbility) poke.baseAbility = ability.name;
+					poke.ability = 'Mummy';
 					break;
 				default:
 					actions += "" + poke.getName() + "\'s Ability was suppressed!";
@@ -4030,11 +4057,25 @@ var Battle = (function () {
 				var spriteData = {'shiny': poke.sprite.sp.shiny};
 				if (kwargs.msg) {
 					actions += "" + poke.getName() + " transformed!";
+				} else if (toId(template.species) === 'darmanitanzen') {
+					actions += "Zen Mode triggered!";
+				} else if (toId(template.species) === 'darmanitan') {
+					actions += "Zen Mode ended!"
 				}
 				poke.sprite.animTransform($.extend(spriteData, template));
 				poke.addVolatile('formechange'); // the formechange volatile reminds us to revert the sprite change on switch-out
 				poke.volatiles.formechange[2] = template.species;
 				poke.side.updateStatbar();
+				break;
+			case '-mega':
+				var poke = this.getPokemon(args[1]);
+				var item = Tools.getItem(args[3]);
+				if (args[2] === 'Rayquaza') {
+					actions += "" + Tools.escapeHTML(poke.side.name) + "'s fervent wish has reached " + poke.getLowerName() + "!";
+				} else {
+					actions += "" + poke.getName() + "'s " + item.name + " is reacting to " + Tools.escapeHTML(poke.side.name) + "'s Mega Bracelet!";
+				}
+				actions += "<br />" + poke.getName() + " has Mega Evolved into Mega " + args[2] + "!";
 				break;
 
 			case '-start':
@@ -4273,7 +4314,7 @@ var Battle = (function () {
 					break;
 				case 'skydrop':
 					if (kwargs.interrupt) {
-						poke.sprite.anim({time:100 * window.speed});
+						poke.sprite.anim({time:100});
 					}
 					actions += "" + poke.getName() + " was freed from the Sky Drop!";
 					break;
@@ -4297,6 +4338,10 @@ var Battle = (function () {
 				case 'healblock':
 					this.resultAnim(poke, 'Heal Block ended', 'good', animDelay);
 					actions += "" + poke.getName() + "'s Heal Block wore off!";
+					break;
+				case 'attract':
+					this.resultAnim(poke, 'Attract&nbsp;ended', 'good', animDelay);
+					actions += '' + poke.getName() + " got over its infatuation.";
 					break;
 				case 'taunt':
 					this.resultAnim(poke, 'Taunt&nbsp;ended', 'good', animDelay);
@@ -4342,8 +4387,15 @@ var Battle = (function () {
 					poke.removeVolatile('stockpile3');
 					actions += "" + poke.getName() + "'s stockpiled effect wore off!";
 					break;
+				case 'bind':
+				case 'wrap':
+				case 'clamp':
+				case 'whirlpool':
+				case 'firespin':
+				case 'magmastorm':
+				case 'sandtomb':
 				case 'infestation':
-					actions += '' + poke.getName() + ' was freed from Infestation!';
+					actions += '' + poke.getName() + ' was freed from ' + effect.name + '!';
 					break;
 				default:
 					if (effect.effectType === 'Move') {
@@ -4493,6 +4545,9 @@ var Battle = (function () {
 					ofpoke.removeSideCondition('Reflect');
 					ofpoke.removeSideCondition('LightScreen');
 					break;
+				case 'beatup':
+					actions += "" + Tools.escapeHTML(kwargs.of) + "'s attack!";
+					break;
 				case 'pursuit':
 					actions += "" + poke.getName() + " is being sent back!";
 					break;
@@ -4506,7 +4561,7 @@ var Battle = (function () {
 					actions += "" + poke.getName() + " couldn't stay airborne because of gravity!";
 					poke.removeVolatile('magnetrise');
 					poke.removeVolatile('telekinesis');
-					poke.sprite.anim({time:100 * window.speed});
+					poke.sprite.anim({time:100});
 					break;
 				case 'magnitude':
 					actions += "Magnitude " + Tools.escapeHTML(args[3]) + "!";
@@ -4516,11 +4571,21 @@ var Battle = (function () {
 					break;
 				case 'skillswap':
 					actions += "" + poke.getName() + " swapped Abilities with its target!";
-					if (ofpoke && poke.side !== ofpoke.side) {
-						this.resultAnim(poke, Tools.escapeHTML(args[3]), 'neutral', 1);
-						this.resultAnim(ofpoke, Tools.escapeHTML(args[4]), 'neutral', 4);
-						actions += "<br />" + poke.getName() + " acquired " + Tools.escapeHTML(args[3]) + "!";
-						actions += "<br />" + ofpoke.getName() + " acquired " + Tools.escapeHTML(args[4]) + "!";
+					var pokeability = Tools.escapeHTML(args[3]) || ofpoke.ability;
+					var ofpokeability = Tools.escapeHTML(args[4]) || poke.ability;
+					if (pokeability) {
+						poke.ability = pokeability;
+						if (!ofpoke.baseAbility) ofpoke.baseAbility = pokeability;
+					}
+					if (ofpokeability) {
+						ofpoke.ability = ofpokeability;
+						if (!poke.baseAbility) poke.baseAbility = ofpokeability;
+					}
+					if (poke.side !== ofpoke.side) {
+						this.resultAnim(poke, pokeability, 'neutral', 1);
+						this.resultAnim(ofpoke, ofpokeability, 'neutral', 4);
+						actions += "<br />" + poke.getName() + " acquired " + pokeability + "!";
+						actions += "<br />" + ofpoke.getName() + " acquired " + ofpokeability + "!";
 					}
 					break;
 				case 'charge':
@@ -4620,7 +4685,7 @@ var Battle = (function () {
 					actions += '' + poke.getName() + '\'s ' + effect.name + ' let it move first!';
 					break;
 				case 'leppaberry':
-					actions += '' + poke.getName() + " restored " + Tools.escapeHTML(args[3]) + "'s PP using its Leppa Berry!";
+					actions += '' + poke.getName() + " restored PP to its " + Tools.escapeHTML(args[3]) + " move using its Leppa Berry!";
 					break;
 				case 'focusband':
 					actions += '' + poke.getName() + " hung on using its Focus Band!";
@@ -5123,7 +5188,7 @@ var Battle = (function () {
 			for (var i = 0; i < this.sides[k].pokemon.length; i++) {
 				var pokemon = this.sides[k].pokemon[i];
 
-				var spriteData = Tools.getSpriteData(pokemon, k, {afd: this.tier === "[Seasonal] Fools Festival"});
+				var spriteData = Tools.getSpriteData(pokemon, k, {afd: this.tier === "[Seasonal] Fools Festival", gen: this.gen});
 				var y = 0;
 				var x = 0;
 				if (k) {
@@ -5201,9 +5266,9 @@ var Battle = (function () {
 			}
 			var message = args.join('|');
 			if (message.substr(0,2) === '//') {
-				this.log('<div class="chat"><strong style="' + hashColor(toUserid(name)) + '">' + clickableName + ':</strong> <em>' + Tools.parseMessage(message.substr(1), name) + '</em></div>', preempt);
+				this.log('<div class="chat chatmessage-' + toId(name) + '"><strong style="' + hashColor(toUserid(name)) + '">' + clickableName + ':</strong> <em>' + Tools.parseMessage(message.substr(1)) + '</em></div>', preempt);
 			} else if (message.substr(0,4).toLowerCase() === '/me ') {
-				this.log('<div class="chat"><strong style="' + hashColor(toUserid(name)) + '">&bull;</strong> <em>' + clickableName + ' <i>' + Tools.parseMessage(message.substr(4), name) + '</i></em></div>', preempt);
+				this.log('<div class="chat chatmessage-' + toId(name) + '"><strong style="' + hashColor(toUserid(name)) + '">&bull;</strong> <em>' + clickableName + ' <i>' + Tools.parseMessage(message.substr(4)) + '</i></em></div>', preempt);
 			} else if (message.substr(0,14).toLowerCase() === '/data-pokemon ') {
 				if (window.Chart) this.log('<div class="chat"><ul class=\"utilichart\">'+Chart.pokemonRow(Tools.getTemplate(message.substr(14)),'',{})+'<li style=\"clear:both\"></li></ul></div>', preempt);
 			} else if (message.substr(0,11).toLowerCase() === '/data-item ') {
@@ -5213,7 +5278,7 @@ var Battle = (function () {
 			} else if (message.substr(0,11).toLowerCase() === '/data-move ') {
 				if (window.Chart) this.log('<div class="chat"><ul class=\"utilichart\">'+Chart.moveRow(Tools.getMove(message.substr(11)),'',{})+'<li style=\"clear:both\"></li></ul></div>', preempt);
 			} else {
-				this.log('<div class="chat"><strong style="' + hashColor(toUserid(name)) + '" class="username" data-name="'+Tools.escapeHTML(name)+'">' + clickableName + ':</strong> <em>' + Tools.parseMessage(message, name) + '</em></div>', preempt);
+				this.log('<div class="chat chatmessage-' + toId(name) + '"><strong style="' + hashColor(toUserid(name)) + '" class="username" data-name="'+Tools.escapeHTML(name)+'">' + clickableName + ':</strong> <em>' + Tools.parseMessage(message) + '</em></div>', preempt);
 			}
 			break;
 		case 'chatmsg':
@@ -5244,14 +5309,14 @@ var Battle = (function () {
 			break;
 		case 'join':
 		case 'j':
-		case 'J':
 			this.log('<div class="chat"><small>' + Tools.escapeHTML(args[1]) + ' joined.</small></div>', preempt);
 			break;
 		case 'leave':
 		case 'l':
-		case 'L':
 			this.log('<div class="chat"><small>' + Tools.escapeHTML(args[1]) + ' left.</small></div>', preempt);
 			break;
+		case 'J':
+		case 'L':
 		case 'spectator':
 		case 'spectatorleave':
 			break;
@@ -5399,6 +5464,15 @@ var Battle = (function () {
 			this.log('<div class="debug"><div class="chat"><small style="color:#999">[DEBUG] ' + Tools.escapeHTML(name) + '.</small></div></div>', preempt);
 			break;
 		case 'unlink':
+			if (Tools.prefs('nounlink')) return;
+			var user = toId(args[2]) || toId(args[1]);
+			var $messages = $('.chatmessage-' + user);
+			if (!$messages.length) break;
+			$messages.find('a').contents().unwrap();
+			if (args[2]) {
+				$messages.hide();
+				this.log('<div class="chatmessage-' + user + '"><button name="revealMessages" value="' + user + '"><small>' + $messages.length + ' message' + ($messages.length > 1 ? 's were' : ' was') + ' hidden, click here to restore.</small></button></div>');
+			}
 			break;
 		default:
 			this.logConsole('unknown command: ' + args[0]);
@@ -5571,6 +5645,7 @@ var Battle = (function () {
 			this.fastForward = time;
 			this.elem.append('<div class="seeking"><strong>seeking...</strong></div>');
 			$.fx.off = true;
+			this.elem.find(':animated').finish();
 			this.swapQueues();
 			this.nextActivity();
 			return;
@@ -5579,6 +5654,7 @@ var Battle = (function () {
 		this.fastForward = time;
 		this.elem.append('<div class="seeking"><strong>seeking...</strong></div>');
 		$.fx.off = true;
+		this.elem.find(':animated').finish();
 		if (this.yourSide.active[0] && this.yourSide.active[0].sprite) {
 			this.yourSide.active[0].sprite.animReset();
 		}
@@ -5783,3 +5859,4 @@ var Battle = (function () {
 
 	return Battle;
 })();
+

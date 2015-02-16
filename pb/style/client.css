@@ -2449,3 +2449,361 @@ blink {
 	animation-duration: 1s;
 	text-decoration: none;
 }
+
+/*********************************************************
+ * Changes From index.html
+ *********************************************************/
+ 
+::selection{background:#f27405}
+body, html {
+	background: white;
+	position: relative;
+	height: 100%;
+}
+.chat-log.hasuserlist {
+	background: white;
+}
+
+/* userlist */
+.userlist {
+	background: url(https://media.pokebattle.com/img/bg.png);
+}
+#lobby-userlist-users {
+	font-weight: bold;
+	color: #333332;
+	font-size: 110%;
+	padding-left: 13px !important;
+	text-align: left !important;
+}
+.userlist li {
+	padding: 1% 3% !important;
+	border-bottom: none;
+}
+.userlist li button {
+	margin: -1% -3% !important;
+	padding: 1% 3% !important;
+	width: 104%;
+}
+.userbutton span, .userbutton strong, .userbutton strong em {
+	color: rgb(242, 116, 5) !important;
+	font-size: 110%;
+}
+
+/* navigation / header */
+a, .fake_link {
+	text-decoration: none;
+	cursor: pointer;
+}
+.hidden {
+	display: none;
+}
+.navigation {
+	position: absolute;
+	top: 0;
+	left: -150px;
+	bottom: 0;
+	width: 150px;
+	background: #44484e;
+	overflow: hidden;
+	z-index: 0;
+	cursor: default;
+	font-family: 'proxima-nova','Helvetica Neue',Calibri,'Droid Sans',Helvetica,Arial,sans-serif;
+	z-index: 1;
+}
+.navigation h2 {
+	text-transform: uppercase;
+	line-height: normal;
+	margin: 0;
+	font-size: 1.1em;
+	padding: 4px 16px;
+	letter-spacing: 1px;
+	color: #b1b5bb;
+	background: #363a3e;
+	text-shadow: 0 1px 0 rgba(0,0,0,0.3);
+	color: #777;
+	border-bottom: 1px solid #555;
+	border-top: 1px solid #111;
+	font-family: inherit;
+	font-weight: 700;
+	text-rendering: optimizelegibility;
+}
+.nav {
+	padding: 0;
+	margin: 0;
+	list-style: none;
+	margin-bottom: 1em;
+}
+.navigation .nav a, .navigation .nav .fake_link {
+	display: block;
+	padding: 4px 16px;
+	line-height: 1.5em;
+	color: #ccd;
+	border: none;
+	background: none;
+	float: none;
+	margin: 0;
+	-webkit-border-radius: 0;
+	border-radius: 0;
+}
+.navigation .nav_item .nav_meta {
+	position: absolute;
+	right: 0;
+	font-size: .714em;
+}
+.navigation .nav_item .close {
+	background: #333;
+	-webkit-border-radius: 1em;
+	border-radius: 1em;
+	color: #fff;
+	cursor: pointer;
+}
+.navigation .nav_item .notifications, .navigation .nav_item .close {
+	height: 1.8207282913165268em;
+	width: 1.8207282913165268em;
+	line-height: 1.8207282913165268em;
+	text-align: center;
+	margin-top: .1em;
+	margin-right: 5px;
+	float: left;
+	opacity: 1;
+	-ms-filter: none;
+	filter: none;
+	font-size: 1em;
+	text-shadow: none;
+}
+.close {
+	float: right;
+	font-size: 20px;
+	font-weight: 700;
+	line-height: 20px;
+	color: #000;
+	text-shadow: 0 1px 0 #fff;
+	opacity: .2;
+	filter: alpha(opacity=20);
+}
+.navigation .nav a:hover, .navigation .nav .fake_link:hover {
+	background: #555a61;
+	text-decoration: none;
+	color: #fff;
+}
+.navigation .nav_item.active, .navigation .nav_item.active:hover {
+	background: #d94e47;
+	color: #fff;
+	cursor: default;
+}
+#header {
+	background: #38342b;
+}
+.mainmenuwrapper {
+	background: url(https://media.pokebattle.com/img/bg.png);
+}
+.maintabbarbottom {
+	background: #d94e47;
+	height: 10px;
+	border: none;
+	top: 43px;
+	z-index: 1;
+}
+.usebar {
+	z-index: 3;
+}
+#header .logo {
+	display: none;
+}
+.inner .siderooms {
+	margin-top: -4px;
+}
+.tabbar .inner a {
+	padding-top: 0 !important;
+	margin-top: 4px;
+	height: 24px;
+}
+#mainmenu {
+	border-left: none;
+	margin-left: 0;
+	
+	margin-top: -14px;
+}
+.mainmenu {
+	overflow-y: auto;
+	width: 340px;
+}
+.pm-window {
+	position: absolute;
+	bottom: 0;
+	margin-bottom: 0;
+}
+.activitymenu {
+	position: absolute;
+	bottom: 2px;
+	top: auto;
+	left: 0;
+	height: 0;
+	width: 0;
+	z-index: 2;
+}
+.pblogotext {
+	display: block;
+	margin: 0;
+	font-size: 32px;
+	color: rgba(255,255,255,0.8);
+	text-shadow: 0 1px 0 #333;
+	text-align: center;
+	height: 52px;
+	line-height: 52px;
+}
+.pblogo {
+	position: absolute;
+	top: 3px;
+	left: 18px;
+	z-index: 2;
+}
+.pbheader {
+	position: absolute;
+	top: 0;
+	left: 93px;
+	height: 42px;
+	z-index: 3;
+}
+.pbheader ul {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	font-size: 1.1em;
+	font-family: 'proxima-nova','Helvetica Neue',Calibri,'Droid Sans',Helvetica,Arial,sans-serif;
+}
+.pbheader ul li {
+	line-height: 42px;
+	display: block;
+	float: left;
+	text-align: left;
+}
+.pbheader ul li a {
+	display: block;
+	padding-left: .75em;
+	padding-right: .75em;
+	color: #fff;
+	text-decoration: none;
+}
+.pbheader ul li a:hover {
+	background: #d94e47;
+	color: #6c2724;
+	text-decoration: none;
+}
+.battleform label.label {
+	color: rgb(103, 88, 88);
+	text-shadow: none;
+}
+.tabbar.maintabbar {
+	height: 0;
+}
+.mainmenufooter {
+	text-shadow: none;
+}
+.mainmenufooter a:hover {
+	color: #003BE9;
+}
+.tabbar a.button {
+	height: 25px;
+}
+.userlist {
+	right: 0;
+	left: auto;
+	height: 100%;
+	outline: 1px solid #b6b6b6;
+	z-index: 1;
+}
+.chat-log.hasuserlist, .chat-log-add.hasuserlist, .tournament-wrapper.hasuserlist {
+	left: 0;
+}
+.menugroup .button, .menugroup .button:hover, .menugroup .button:active {
+	background: #779EC5;
+	background: hsl(0, 82%, 63%);
+	background: -webkit-gradient(linear, left top, left bottom, from(hsl(0, 100%, 65%)), to(hsl(0, 82%, 63%)));
+	background: -moz-linear-gradient(top, hsl(0, 100%, 65%), hsl(0, 82%, 63%));
+	background: linear-gradient(top, hsl(0, 100%, 65%), hsl(0, 82%, 63%));
+}
+
+/* popups */
+.ps-popup {
+	background: #FFFFFF;
+}
+.ps-popup, #tooltipwrapper {
+	margin-left: -150px;
+	z-index: 3;
+}
+
+/* teambuilder */
+.setchart-nickname, .setchart, .teambuilder-results h3, .teambuilder-results .utilichart h3 {
+	background: #E9E9E9;
+}
+.teambar button, .teambar button:hover {
+	background: #E3E3E3;
+}
+.builder-pbv {
+	position: absolute;
+	top: 0;
+	left: 0;
+	font-size: 11px;
+}
+.teambar .pokemon {
+	position: relative;
+}
+.pbvTotal {
+	float: left;
+	font-size: 12px;
+	color: red;
+	text-shadow: 0px 1px 0px red;
+	width: 25px;
+	font-size: 11px;
+	text-align: center;
+}
+.pbvTotal b {
+	color: grey;
+	text-shadow: 0px 1px 0px black;
+}
+.pbvTotal hr {
+	margin-top: 4px;
+	margin-bottom: 2px;
+}
+.conicon {
+	display: block;
+	width: 32px;
+	margin-left: 5px;
+	height: 24px;
+	float: left;
+}
+.buttonteam {
+	text-align: left;
+	padding: 10px;
+	vertical-align: middle;
+	width: 250px;
+	height: 85px;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	background: #f5f5f5;
+	cursor: pointer;
+	outline: none;
+}
+.buttonteam:hover {
+	background: #fff;
+}
+.buttonteam:hover h2 {
+	color: #bd4f00;
+}
+.buttonteam h2 {
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+	width: 225px;
+	margin: 0;
+	font-size: 1.5em;
+	color: #f27405;
+	text-decoration: none;
+}
+.team-pbv {
+	font-size: 1.1em;
+}
+ul {
+	list-style-type: circle;
+}
