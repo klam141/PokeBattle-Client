@@ -3,7 +3,7 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 		<title>Showdown!</title>
-		<link rel="shortcut icon" href="favicon.ico" id="dynamic-favicon" />
+		<link rel="shortcut icon" href="favicon-pb.ico" id="dynamic-favicon" />
 		<link rel="stylesheet" href="style/client.css" />
 		<link rel="stylesheet" href="style/sim-types.css" />
 		<link rel="stylesheet" href="style/battle.css" />
@@ -52,7 +52,31 @@
 			CFInstall.check({mode: "overlay"});
 		</script>
 		<![endif]-->
-
+		<div class="navigation">
+			<p class="pblogotext">pb</p>
+			<h2>Chat</h2>
+			<ul class="nav nav_rooms"></ul>
+			<h2>Other links</h2>
+			<ul class="nav">
+				<li id="tabteambuilder" class="nav_item fake_link" onclick="$('#openTeambuilder').click();">Teambuilder</li>
+				<li class="nav_item fake_link" onclick="$('#openBattleList').click();">Battle List</li>
+				<li id="tabladder" class="nav_item fake_link" onclick="$('#openLadder').click();">Leaderboard</li>
+			</ul>
+			<h2 class="header_battles hidden">Battles</h2>
+			<ul class="nav nav_battles hidden"></ul>
+			<h2 class="header_messages hidden">Messages</h2>
+			<ul class="nav nav_messages"></ul>
+		</div>
+		<img class="pblogo" src="./pb_red.png" width="60" height="59" alt="Pok&eacute;Battle! (beta)" />
+		<div class="pbheader">
+			<ul>
+				<li><a href="//sim.pokebattle.com">Simulator</a></li>
+				<li><a href="//forums.pokebattle.com" target="_blank">Forums</a></li>
+				<li><a href="//pokebattle.com/dex" target="_blank">Pokedex</a></li>
+				<li><a href="//pokebattle.com/leaderboard" target="_blank">Leaderboard</a></li>
+				<li><a href="//pokebattle.com/accounts/logout">Logout</a></li>
+			</ul>
+		</div>
 		<div id="header" class="header">
 			<img class="logo" src="pokemonshowdownbeta.png" alt="Pok&eacute;mon Showdown! (beta)" /><div class="maintabbarbottom"></div>
 		</div>
