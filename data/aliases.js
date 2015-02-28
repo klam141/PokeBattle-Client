@@ -48,6 +48,7 @@ exports.BattleAliases = {
 	"megamedicham": "Medicham-Mega",
 	"megamedi": "Medicham-Mega",
 	"megametagross": "Metagross-Mega",
+	"megagross": "Metagross-Mega"
 	"megamewtwo": "Mewtwo-Mega-Y",
 	"megamewtwox": "Mewtwo-Mega-X",
 	"megamewtwoy": "Mewtwo-Mega-Y",
@@ -67,6 +68,7 @@ exports.BattleAliases = {
 	"megattar": "Tyranitar-Mega",
 	"megavenusaur": "Venusaur-Mega",
 	"megavenu": "Venusaur-Mega",
+	"megasaur": "Venusaur-Mega",
 	"megazam": "Alakazam-Mega",
 	"megazardx": "Charizard-Mega-X",
 	"megazardy": "Charizard-Mega-y",
@@ -75,9 +77,11 @@ exports.BattleAliases = {
 
 	// primal reversions
 	"primalgroudon": "Groudon-Primal",
+	"pgroudon": "Groudon-Primal",
 	"primaldon": "Groudon-Primal",
 	"primalkyogre": "Kyogre-Primal",
 	"primalogre": "Kyogre-Primal",
+	"pkyogre": "Kyogre-Primal",
 
 	// formes
 	"bugceus": "Arceus-Bug",
@@ -119,6 +123,7 @@ exports.BattleAliases = {
 	"deod": "Deoxys-Defense",
 	"deoxyss": "Deoxys-Speed",
 	"deos": "Deoxys-Speed",
+	"eternalfloette": "Floette-Eternal-FLower",
 	"giratinao": "Giratina-Origin",
 	"gourgeisthuge": "Gourgeist-Super",
 	"hoopau": "Hoopa-Unbound",
@@ -145,6 +150,7 @@ exports.BattleAliases = {
 	"wormadams": "Wormadam-Trash",
 	"wormadamsteel": "Wormadam-Trash",
 	"floettee": "Floette-Eternal-Flower",
+	"floetteeternal": "Floette-Eternal-Flower",
 
 	// base formes
 	"nidoranfemale": "Nidoran-F",
@@ -209,8 +215,10 @@ exports.BattleAliases = {
 
 	// pokemon
 	"aboma": "Abomasnow",
+	"bliss": "Blissey",
 	"chomp": "Garchomp",
 	"cofag": "Cofagrigus",
+	"cress": "Cresselia",
 	"dnite": "Dragonite",
 	"don": "Groudon",
 	"dogars": "Koffing",
@@ -227,6 +235,7 @@ exports.BattleAliases = {
 	"landoi": "Landorus",
 	"landot": "Landorus-Therian",
 	"luke":  "Lucario",
+	"lurk": "Golurk",
 	"mence": "Salamence",
 	"ogre": "Kyogre",
 	"p2": "Porygon2",
@@ -234,10 +243,12 @@ exports.BattleAliases = {
 	"pz": "Porygon-Z",
 	"poryz": "Porygon-Z",
 	"rank": "Reuniclus",
+	"skarm": "Skarmory",
 	"smogon": "Koffing",
 	"talon": "Talonflame",
 	"terra": "Terrakion",
 	"ttar": "Tyranitar",
+	"zard": "Charizard",
 	"zam": "Alakazam",
 	"ohmagod":"Plasmanta",
 
