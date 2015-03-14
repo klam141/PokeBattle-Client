@@ -48,7 +48,7 @@ exports.BattleAliases = {
 	"megamedicham": "Medicham-Mega",
 	"megamedi": "Medicham-Mega",
 	"megametagross": "Metagross-Mega",
-	"megagross": "Metagross-Mega"
+	"megagross": "Metagross-Mega",
 	"megamewtwo": "Mewtwo-Mega-Y",
 	"megamewtwox": "Mewtwo-Mega-X",
 	"megamewtwoy": "Mewtwo-Mega-Y",
