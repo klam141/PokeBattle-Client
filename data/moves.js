@@ -10250,6 +10250,7 @@ exports.BattleMovedex = {
 							} 
 						} 
 					this.runMove('pursuit', sources[i], pokemon);
+					}
 				}
 			}
 		},
@@ -13851,6 +13852,7 @@ exports.BattleMovedex = {
 			onAccuracyPriority: -1, 
 			onAccuracy: function (accuracy, target, source, move) { 
 				if (move && !move.ohko) return true; 
+			},
 			onImmunity: function (type) {
 				if (type === 'Ground') return false;
 			},
@@ -15499,3 +15501,4 @@ exports.BattleMovedex = {
 		type: "Water"
 	}
 };
+
