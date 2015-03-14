@@ -3016,7 +3016,7 @@ exports.BattleAbilities = {
 		ignoreEvasion: true,
 		ignoreDefensive: true,
 		ignoreAccuracy: true,
-		ignore Offensive: true,
+		ignoreOffensive: true,
 		rating: 3,
 		num: 109
 	},
