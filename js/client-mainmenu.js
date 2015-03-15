@@ -988,8 +988,11 @@
 		type: 'semimodal',
 		initialize: function() {
 			var buf = '';
-			buf += '<p style="text-align:center"><img src="' + Tools.resourcePrefix + 'pokemonshowdownbeta.png" alt="Pok&eacute;mon Showdown (beta)" /></p>';
+			buf += '<p style="text-align:center"><img src="' +'pb_red.png" alt="Pok&eacute;mon Showdown (beta)" width="146"></p>';
 			if (Config.version) buf += '<p style="text-align:center;color:#555555"><small>Version <strong>'+Config.version+'</strong></small></p>';
+			buf += '<h2>The Best</h2>';
+			buf += '<ul><li><p><strong>David</strong> [klam141] <small>&ndash; All Me</small></p></li></ul>';
+			/*
 			buf += '<h2>Owner</h2>';
 			buf += '<ul><li><p><a href="http://guangcongluo.com/" target="_blank" class="subtle"><strong>Guangcong Luo</strong> [Zarel]</a> <small>&ndash; Development, Design</small></p></li></ul>';
 			buf += '<h2>Staff</h2>';
@@ -1008,8 +1011,9 @@
 			buf += '<li><p><strong>Quinton Lee</strong> [sirDonovan] <small>&ndash; Development</small></p></li>';
 			buf += '<li><p><strong>Robin Vandenbrande</strong> [Quinella] <small>&ndash; Development</small></p></li></ul>';
 			buf += '<h2>More</h2>';
+			*/
 			buf += '<ul><li><p><a href="http://pokemonshowdown.com/credits" target="_blank">Full Credits List</a></p></li></ul>';
-			buf += '<p class="buttonbar"><button name="close" class="autofocus"><strong>They sound like cool people</strong></button></p>';
+			buf += '<p class="buttonbar"><button name="close" class="autofocus"><strong>I\'m fine with keeping this.</strong></button></p>';
 			this.$el.addClass('credits').html(buf);
 		}
 	});
