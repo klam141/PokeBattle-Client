@@ -524,6 +524,7 @@ function BattleChart()
 
 		if (!searchTerm || init)
 		{
+			
 			for (var i=0; i<buckets.length; i++)
 			{
 				var ib = buckets[i];
@@ -534,8 +535,10 @@ function BattleChart()
 					var match = chartData.other[ib][j];
 					if (firstMatch)
 					{
-						text += '<li><h3>'+buckets[i]+'</h3></li>';
-						firstMatch = false;
+						if(buckets[0] != pbvList[0]){
+							text += '<li><h3>'+buckets[i]+'</h3></li>';
+							firstMatch = false;
+						}
 					}
 					text += self.row(match.thing, '', match);
 				}
