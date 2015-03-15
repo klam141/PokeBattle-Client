@@ -273,13 +273,7 @@ if ($.cookie('anim_speed')) window.speed = Math.abs($.cookie('anim_speed')); els
 
 			this.topbar = new Topbar({el: $('#header')});
 			this.addRoom('');
-			if (!this.down && $(window).width() >= 916) {
-				if (document.location.hostname === 'play.pokemonshowdown.com') {
-					this.addRoom('rooms');
-				} else {
-					this.addRoom('lobby');
-				}
-			}
+			this.addRoom('lobby');
 
 			var self = this;
 
